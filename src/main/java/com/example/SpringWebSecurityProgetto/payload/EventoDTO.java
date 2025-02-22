@@ -22,6 +22,8 @@ public class EventoDTO {
 
     private int numeroPosti;
 
+    private Utente utentePerEvento;
+
     @NotBlank(message = "Il campo è obbligatorio")
     private Utente creatoreEvento;
 }

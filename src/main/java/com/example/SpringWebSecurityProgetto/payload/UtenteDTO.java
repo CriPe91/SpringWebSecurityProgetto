@@ -2,8 +2,6 @@ package com.example.SpringWebSecurityProgetto.payload;
 
 import com.example.SpringWebSecurityProgetto.enumeration.RuoliUtente;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

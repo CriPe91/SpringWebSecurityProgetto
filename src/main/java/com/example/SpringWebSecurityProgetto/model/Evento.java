@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long evento_id;
     @Column(nullable = false)
     private String titolo;
 
@@ -29,6 +29,9 @@ public class Evento {
     private String luogo;
 
     private int numeroPosti;
+
+    @ManyToOne
+    private Utente utentePerEvento;
 
     @ManyToOne
     @JoinColumn(name = "creatoreEvento_id")

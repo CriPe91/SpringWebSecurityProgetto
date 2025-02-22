@@ -1,19 +1,21 @@
 package com.example.SpringWebSecurityProgetto.service;
 
-import com.example.SpringWebSecurityProgetto.enumeration.RuoliUtente;
 import com.example.SpringWebSecurityProgetto.exception.EmailDuplicataException;
 import com.example.SpringWebSecurityProgetto.exception.UsernameDuplicatoException;
 import com.example.SpringWebSecurityProgetto.model.Utente;
 import com.example.SpringWebSecurityProgetto.payload.UtenteDTO;
-import com.example.SpringWebSecurityProgetto.payload.request.RegistrazioneRequest;
 import com.example.SpringWebSecurityProgetto.repository.UtenteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -23,34 +25,38 @@ public class UtenteService {
     UtenteRepository utenteRepository;
 
     //  crea Utente
-    public String insertUtente(RegistrazioneRequest userDTO) throws UsernameDuplicatoException, EmailDuplicataException {
-        // Verifica se username ed email sono già esistenti
-        controlloDuplicati(userDTO.getUsername(), userDTO.getEmail());
+    public String creaUtente(UtenteDTO utenteDTO){
 
-        // Gestione dei ruoli
-        Set<RuoliUtente> ruoliUtente = new HashSet<>();
+        Utente user = dto_entity(utenteDTO);
+        user = utenteRepository.save(user);
 
-        // Se i ruoli sono null o vuoti, impostiamo il ruolo di default come ROLE_USER
-        if (userDTO.getRuoloUtente() == null || userDTO.getRuoloUtente().describeConstable().isEmpty()) {
-            ruoliUtente.add(RuoliUtente.UTENTE_NORMALE);  // Ruolo di default
-        } else {
-            // Altrimenti, mappiamo i ruoli passati nella richiesta e verifichiamo che siano validi
-            for (String ruoloNome : userDTO.getRuoloUtente()) {
-                try {
-                    RuoliUtente ruolo = RuoliUtente.valueOf(ruoloNome);  // Verifica se il ruolo esiste nell'enum
-                    ruoliUtente.add(ruolo);
-                } catch (IllegalArgumentException e) {
-                    // Se il ruolo non è valido, puoi lanciare un'eccezione o gestirlo come vuoi
-                    throw new IllegalArgumentException("Ruolo non valido: " + ruoloNome);
-                }
-            }
-        }
-        // Salvataggio dell'utente nel database
-        Long id = utenteRepository.save(user).getId();
-
-        // Restituisci il messaggio di conferma
-        return "L'utente " + user.getUsername() + " con id " + id + " è stato inserito correttamente";
+     return "Utente inserito: " + user;
     }
+
+    // Trova Utente tramite ID
+    public UtenteDTO trovaUtente(long id){
+        Optional<Utente> userTrovato = utenteRepository.findById(id);
+        if(userTrovato.isPresent()){
+        return entity_dto(userTrovato.get());
+        }else{
+            throw new RuntimeException("Utente non trovato");
+        }
+
+    }
+
+    // Trova tutti gli Utenti
+    public Page<UtenteDTO> trovaTuttiUtenti(Pageable page){
+        Page<Utente> listaUtenti = utenteRepository.findAll(page);
+        List<UtenteDTO> listaUtentiDTO = new ArrayList<>();
+        // verifico e ciclo l elemento di destra tramite l appartenenza alla classe di sinistra
+        for(Utente utente : listaUtenti.getContent()){
+            // travaso e aggiungo la lista di utenti
+            UtenteDTO utenteDTO = entity_dto(utente);
+            listaUtentiDTO.add(utenteDTO);
+        }
+        return new PageImpl<>(listaUtentiDTO);
+    }
+
 
     // controllo duplicato Username e Password
     public void controlloDuplicati(String username, String email) throws UsernameDuplicatoException, EmailDuplicataException {
@@ -76,7 +82,7 @@ public class UtenteService {
         user.setUsername(utenteDto.getUsername());
         user.setEmail(utenteDto.getEmail());
         user.setPassword(utenteDto.getPassword());
-        user.setRuoliUtente(Collections.singleton(utenteDto.getRuoloUtente()));
+        user.setRuoliUtente(utenteDto.getRuoloUtente());
         return user;
     }
 
@@ -87,8 +93,7 @@ public class UtenteService {
         userDto.setCognome(utente.getCognome());
         userDto.setUsername(utente.getUsername());
         userDto.setEmail(utente.getEmail());
-//        userDto.setPassword(utente.getPassword());
-        userDto.setRuoloUtente(utente.getRuoloUtente());
+        userDto.setRuoloUtente(utente.getRuoliUtente());
         return userDto;
     }
 }

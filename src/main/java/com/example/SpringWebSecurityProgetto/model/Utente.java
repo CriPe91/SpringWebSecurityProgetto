@@ -21,10 +21,12 @@ public class Utente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long utente_id;
 
+    @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
     private String cognome;
 
     @Column(nullable = false,unique = true)
@@ -36,11 +38,10 @@ public class Utente {
     @Column(nullable = false)
     private String email;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Set<RuoliUtente> ruoliUtente = new HashSet<>();
+    private RuoliUtente ruoliUtente;
 
-    @OneToMany
+    @OneToMany(mappedBy = "evento_id")
     private List<Evento> listaEventi = new ArrayList<>();
 
 }

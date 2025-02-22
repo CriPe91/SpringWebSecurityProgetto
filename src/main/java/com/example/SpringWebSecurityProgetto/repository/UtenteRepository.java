@@ -9,14 +9,13 @@ import java.util.Optional;
 @Repository
 public interface UtenteRepository extends JpaRepository<Utente,Long> {
 
-    public Optional<Utente> findByUsername(String username);
+     Optional<Utente> findByUsername(String username);
 
-    public Utente findById(long id);
 
     // Controllo per i duplicati Username e Password
 
-    public boolean existsByUsername(String username);
+   boolean existsByUsername(String username);
 
-    public boolean existsByEmail(String email);
+   boolean existsByEmail(String email);
 
 }
