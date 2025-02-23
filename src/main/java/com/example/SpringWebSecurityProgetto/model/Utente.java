@@ -38,10 +38,13 @@ public class Utente {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private RuoliUtente ruoliUtente;
+    @ManyToOne
+    private Ruolo ruoloUtente;
+
+    @OneToMany(mappedBy = "prenotazione_id")
+    private List<Prenotazione> listaPrenotazioni;
 
     @OneToMany(mappedBy = "evento_id")
-    private List<Evento> listaEventi = new ArrayList<>();
+    private List<Evento> listaEventi;
 
 }

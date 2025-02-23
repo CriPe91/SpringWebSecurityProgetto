@@ -3,6 +3,7 @@ package com.example.SpringWebSecurityProgetto.payload;
 import com.example.SpringWebSecurityProgetto.enumeration.RuoliUtente;
 
 
+import com.example.SpringWebSecurityProgetto.model.Ruolo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class UtenteDTO {
     @NotBlank(message = "Il campo è obbligatorio")
     private String password;
 
-    private RuoliUtente ruoloUtente;
+    private Ruolo ruoloUtente;
 
 
 }

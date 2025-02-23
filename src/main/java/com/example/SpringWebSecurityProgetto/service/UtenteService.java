@@ -82,7 +82,7 @@ public class UtenteService {
         user.setUsername(utenteDto.getUsername());
         user.setEmail(utenteDto.getEmail());
         user.setPassword(utenteDto.getPassword());
-        user.setRuoliUtente(utenteDto.getRuoloUtente());
+        user.setRuoloUtente(utenteDto.getRuoloUtente());
         return user;
     }
 
@@ -93,7 +93,7 @@ public class UtenteService {
         userDto.setCognome(utente.getCognome());
         userDto.setUsername(utente.getUsername());
         userDto.setEmail(utente.getEmail());
-        userDto.setRuoloUtente(utente.getRuoliUtente());
+        userDto.setRuoloUtente(utente.getRuoloUtente());
         return userDto;
     }
 }
