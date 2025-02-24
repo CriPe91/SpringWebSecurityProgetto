@@ -1,5 +1,6 @@
 package com.example.SpringWebSecurityProgetto.payload.request;
 
+import com.example.SpringWebSecurityProgetto.enumeration.RuoliUtente;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,5 +28,5 @@ import lombok.Data;
         @Email
         private String email;
 
-        private String ruolo;
+        private RuoliUtente ruolo;
     }

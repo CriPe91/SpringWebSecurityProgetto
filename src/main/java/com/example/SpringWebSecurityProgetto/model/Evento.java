@@ -31,10 +31,11 @@ public class Evento {
 
     private int numeroPosti;
 
-    @ManyToOne
+    @OneToMany
+    @JoinColumn(name = "utente_id")
     private List<Utente> utentiEvento;
 
     @ManyToOne
-    @JoinColumn(name = "creatoreEvento_id")
+    @JoinColumn(name = "creatoreEvento")
     private Utente creatoreEvento;
 }

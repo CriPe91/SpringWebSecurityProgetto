@@ -38,8 +38,8 @@ public class Utente {
     @Column(nullable = false)
     private String email;
 
-    @ManyToOne
-    private Ruolo ruoloUtente;
+    @Enumerated(EnumType.STRING)
+    private RuoliUtente ruoloUtente;
 
     @OneToMany(mappedBy = "prenotazione_id")
     private List<Prenotazione> listaPrenotazioni;

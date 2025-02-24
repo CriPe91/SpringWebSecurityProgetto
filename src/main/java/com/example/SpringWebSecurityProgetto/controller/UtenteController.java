@@ -1,6 +1,9 @@
 package com.example.SpringWebSecurityProgetto.controller;
 
+import com.example.SpringWebSecurityProgetto.exception.EmailDuplicataException;
+import com.example.SpringWebSecurityProgetto.exception.UsernameDuplicatoException;
 import com.example.SpringWebSecurityProgetto.payload.UtenteDTO;
+import com.example.SpringWebSecurityProgetto.payload.request.RegistrazioneRequest;
 import com.example.SpringWebSecurityProgetto.service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,19 +25,28 @@ public class UtenteController {
     UtenteService utenteService;
 
     @PostMapping("newUtente")
-    public ResponseEntity<?> nuovoUtente(@RequestBody @Validated UtenteDTO utenteDTO, BindingResult validation) {
+    public ResponseEntity<?> nuovoUtente(@RequestBody @Validated RegistrazioneRequest utenteDTO, BindingResult validation) {
 
-        if (validation.hasErrors()) {
-            String errorMessage = "ERRORE DI VALIDAZIONE \n";
+        try{
 
-            for (ObjectError errore : validation.getAllErrors()) {
-                errorMessage += errore.getDefaultMessage() + "\n";
+            if (validation.hasErrors()) {
+                String errorMessage = "ERRORE DI VALIDAZIONE \n";
+
+                for (ObjectError errore : validation.getAllErrors()) {
+                    errorMessage += errore.getDefaultMessage() + "\n";
+                }
+                return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+
+            String NuovoUtente = utenteService.creaUtente(utenteDTO);
+            return new ResponseEntity<>("Dipendente inserito nel DB: " + NuovoUtente, HttpStatus.CREATED);
+
+        } catch (UsernameDuplicatoException e) {
+            return new ResponseEntity<>("Username già utilizzato", HttpStatus.BAD_REQUEST);
+        } catch (EmailDuplicataException e) {
+            return new ResponseEntity<>("Email non disponibile", HttpStatus.BAD_REQUEST);
         }
 
-        String NuovoUtente = utenteService.creaUtente(utenteDTO);
-        return new ResponseEntity<>("Dipendente inserito nel DB: " + NuovoUtente, HttpStatus.CREATED);
     }
 
 

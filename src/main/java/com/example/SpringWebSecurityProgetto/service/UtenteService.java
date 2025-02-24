@@ -4,6 +4,7 @@ import com.example.SpringWebSecurityProgetto.exception.EmailDuplicataException;
 import com.example.SpringWebSecurityProgetto.exception.UsernameDuplicatoException;
 import com.example.SpringWebSecurityProgetto.model.Utente;
 import com.example.SpringWebSecurityProgetto.payload.UtenteDTO;
+import com.example.SpringWebSecurityProgetto.payload.request.RegistrazioneRequest;
 import com.example.SpringWebSecurityProgetto.repository.UtenteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ public class UtenteService {
     UtenteRepository utenteRepository;
 
     //  crea Utente
-    public String creaUtente(UtenteDTO utenteDTO){
+    public String creaUtente(RegistrazioneRequest utenteDTO) throws UsernameDuplicatoException, EmailDuplicataException{
+
+        controlloDuplicati(utenteDTO.getUsername(),utenteDTO.getEmail());
 
         Utente user = dto_entity(utenteDTO);
         user = utenteRepository.save(user);
@@ -58,6 +61,8 @@ public class UtenteService {
     }
 
 
+
+
     // controllo duplicato Username e Password
     public void controlloDuplicati(String username, String email) throws UsernameDuplicatoException, EmailDuplicataException {
 
@@ -75,14 +80,14 @@ public class UtenteService {
 
     // travaso DTO ----> ENTITY
 
-    public Utente dto_entity(UtenteDTO utenteDto) {
+    public Utente dto_entity(RegistrazioneRequest utenteDto) {
         Utente user = new Utente();
         user.setNome(utenteDto.getNome());
         user.setCognome(utenteDto.getCognome());
         user.setUsername(utenteDto.getUsername());
         user.setEmail(utenteDto.getEmail());
         user.setPassword(utenteDto.getPassword());
-        user.setRuoloUtente(utenteDto.getRuoloUtente());
+        user.setRuoloUtente(utenteDto.getRuolo());
         return user;
     }
 

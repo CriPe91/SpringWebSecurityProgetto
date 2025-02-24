@@ -1,6 +1,6 @@
 package com.example.SpringWebSecurityProgetto.security.services;
 
-import com.example.SpringWebSecurityProgetto.model.Ruolo;
+import com.example.SpringWebSecurityProgetto.enumeration.RuoliUtente;
 import com.example.SpringWebSecurityProgetto.model.Utente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private Ruolo ruolo;
+    private RuoliUtente ruolo;
 
 
 
@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(ruolo.getNome().name()));
+        return List.of(new SimpleGrantedAuthority(ruolo.name()));
     }
 
     @Override
